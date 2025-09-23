@@ -28,15 +28,15 @@ public class Casino {
         jugadores.add(jugador);
     }
     
-    public Jugador crearJugador(String nombre, int tipo) {
+    public Jugador crearJugador(String nombre,String apodo, int tipo) {
         int dineroInicial = 500;
         return switch (tipo) {
-            case 1 -> new JugadorNovato(nombre, dineroInicial);
-            case 2 -> new JugadorExperto(nombre, dineroInicial);
-            case 3 -> new JugadorVIP(nombre, dineroInicial);
+            case 1 -> new JugadorNovato(nombre,apodo, dineroInicial);
+            case 2 -> new JugadorExperto(nombre,apodo, dineroInicial);
+            case 3 -> new JugadorVIP(nombre,apodo, dineroInicial);
             default -> {
                 System.out.println("Tipo inválido. Se asignará como Novato.");
-                yield new JugadorNovato(nombre, dineroInicial);
+                yield new JugadorNovato(nombre, apodo,dineroInicial);
             }
         };
     }

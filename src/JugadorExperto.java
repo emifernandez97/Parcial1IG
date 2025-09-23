@@ -1,7 +1,7 @@
 // Archivo: JugadorExperto.java
 public class JugadorExperto extends Jugador {
-    public JugadorExperto(String nombre, int dineroInicial) {
-        super(nombre, dineroInicial);
+    public JugadorExperto(String nombre,String apodo, int dineroInicial) {
+        super(nombre, apodo,dineroInicial);
     }
     @Override
     public int calcularApuesta() { return (int) (getDinero() * 0.20); }
