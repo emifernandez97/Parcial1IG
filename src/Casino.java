@@ -6,10 +6,22 @@ import java.util.Scanner;
 public class Casino {
     private final List<Jugador> jugadores;
     private final JuegoDados juego;
+    private int rondasJugadas;
 
     public Casino() {
         this.jugadores = new ArrayList<>();
         this.juego = new JuegoDados();
+        this.rondasJugadas = 0;
+    }
+    
+    // --- NUEVO MÉTODO GETTER ---
+    public List<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    // --- NUEVO MÉTODO GETTER ---
+    public int getRondasJugadas() {
+        return rondasJugadas;
     }
 
     public void agregarJugador(Jugador jugador) {
@@ -30,8 +42,14 @@ public class Casino {
     }
 
     public void jugar(Scanner scanner) {
-        int rondasMaximas = 3;
+        
+        int rondasMaximas = 5;
+        this.rondasJugadas = 0;
+        
         for (int i = 1; i <= rondasMaximas; i++) {
+            
+            this.rondasJugadas = i;
+            
             System.out.println("\n<<<<< RONDA " + i + " >>>>>");
             mostrarEstadoJugadores();
             
@@ -52,8 +70,39 @@ public class Casino {
         }
         
         System.out.println("\n====== FIN DEL JUEGO ======");
-        mostrarEstadoFinal();
+        //mostrarEstadoFinal()
     }
+    
+    ///ACtividadParcial
+    /**
+     * MÉTODO MODIFICADO: Ahora busca y DEVUELVE al ganador final.
+     * @return El objeto Jugador que ganó, o null si no hay ganador.
+     */
+    public Jugador obtenerGanadorFinal() {
+        mostrarEstadoFinal(); // Imprime los detalles como antes
+        
+        if (jugadores.isEmpty()) {
+            return null;
+        }
+
+        Jugador ganadorFinal = null;
+        int maxDinero = -1;
+        
+        for (Jugador j : jugadores) {
+            if (j.getDinero() > maxDinero) {
+                maxDinero = j.getDinero();
+                ganadorFinal = j;
+            }
+        }
+        
+        if(ganadorFinal != null){
+             System.out.println("\n¡El campeón del casino es " + ganadorFinal.getNombre() + "!");
+        }
+       
+        return ganadorFinal;
+    }
+    //FinActividadParcial
+    
     
     private void mostrarEstadoJugadores() {
         System.out.println("\n--- Estado Actual ---");
