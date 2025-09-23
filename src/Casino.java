@@ -1,4 +1,3 @@
-// Archivo: Casino.java
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,44 +11,34 @@ public class Casino {
         this.jugadores = new ArrayList<>();
         this.juego = new JuegoDados();
         this.rondasJugadas = 0;
-    }
-    
-    // --- NUEVO MÉTODO GETTER ---
-    public List<Jugador> getJugadores() {
-        return jugadores;
-    }
-
-    // --- NUEVO MÉTODO GETTER ---
-    public int getRondasJugadas() {
-        return rondasJugadas;
+        
+        Jugador laCasa = new JugadorCasino("La Casa", "Casino", 99999);
+        this.jugadores.add(laCasa);
+        System.out.println("-> La Casa se ha unido a la mesa.");
     }
 
-    public void agregarJugador(Jugador jugador) {
-        jugadores.add(jugador);
-    }
-    
-    public Jugador crearJugador(String nombre,String apodo, int tipo) {
+    public List<Jugador> getJugadores() { return jugadores; }
+    public int getRondasJugadas() { return rondasJugadas; }
+    public void agregarJugador(Jugador jugador) { jugadores.add(jugador); }
+
+    public Jugador crearJugador(String nombre, String apodo, int tipo) {
         int dineroInicial = 500;
         return switch (tipo) {
-            case 1 -> new JugadorNovato(nombre,apodo, dineroInicial);
-            case 2 -> new JugadorExperto(nombre,apodo, dineroInicial);
-            case 3 -> new JugadorVIP(nombre,apodo, dineroInicial);
+            case 1 -> new JugadorNovato(nombre, apodo, dineroInicial);
+            case 2 -> new JugadorExperto(nombre, apodo, dineroInicial);
+            case 3 -> new JugadorVIP(nombre, apodo, dineroInicial);
             default -> {
                 System.out.println("Tipo inválido. Se asignará como Novato.");
-                yield new JugadorNovato(nombre, apodo,dineroInicial);
+                yield new JugadorNovato(nombre, apodo, dineroInicial);
             }
         };
     }
 
     public void jugar(Scanner scanner) {
-        
-        int rondasMaximas = 5;
+        int rondasMaximas = 3;
         this.rondasJugadas = 0;
-        
         for (int i = 1; i <= rondasMaximas; i++) {
-            
             this.rondasJugadas = i;
-            
             System.out.println("\n<<<<< RONDA " + i + " >>>>>");
             mostrarEstadoJugadores();
             
@@ -68,68 +57,28 @@ public class Casino {
                 break;
             }
         }
-        
         System.out.println("\n====== FIN DEL JUEGO ======");
-        //mostrarEstadoFinal()
     }
     
-    ///ACtividadParcial
-    /**
-     * MÉTODO MODIFICADO: Ahora busca y DEVUELVE al ganador final.
-     * @return El objeto Jugador que ganó, o null si no hay ganador.
-     */
     public Jugador obtenerGanadorFinal() {
-        mostrarEstadoFinal(); // Imprime los detalles como antes
+        if (jugadores.isEmpty()) return null;
         
-        if (jugadores.isEmpty()) {
-            return null;
-        }
-
         Jugador ganadorFinal = null;
         int maxDinero = -1;
-        
         for (Jugador j : jugadores) {
             if (j.getDinero() > maxDinero) {
                 maxDinero = j.getDinero();
                 ganadorFinal = j;
             }
         }
-        
-        if(ganadorFinal != null){
-             System.out.println("\n¡El campeón del casino es " + ganadorFinal.getNombre() + "!");
-        }
-       
         return ganadorFinal;
     }
-    //FinActividadParcial
-    
     
     private void mostrarEstadoJugadores() {
         System.out.println("\n--- Estado Actual ---");
         for (Jugador j : jugadores) {
-            System.out.println("- " + j.getNombre() + " (" + j.obtenerTipoJugador() + "): $" + j.getDinero());
+            System.out.println("- " + j.getNombre() + " (" + j.getApodo() + "): $" + j.getDinero());
         }
         System.out.println();
-    }
-    
-    private void mostrarEstadoFinal() {
-        System.out.println("--- Resultados Finales ---");
-        Jugador ganadorFinal = null;
-        int maxDinero = -1;
-
-        if (jugadores.isEmpty()) {
-            System.out.println("¡Todos los jugadores han sido eliminados!");
-            return;
-        }
-
-        for (Jugador j : jugadores) {
-            System.out.println("- " + j.getNombre() + " terminó con $" + j.getDinero() + " y " + j.getPartidasGanadas() + " rondas ganadas.");
-            if (j.getDinero() > maxDinero) {
-                maxDinero = j.getDinero();
-                ganadorFinal = j;
-            }
-        }
-        
-        System.out.println("\n¡El campeón del casino es " + ganadorFinal.getNombre() + "!");
     }
 }

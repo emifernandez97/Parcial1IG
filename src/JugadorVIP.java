@@ -1,8 +1,7 @@
-// Archivo: JugadorVIP.java
 public class JugadorVIP extends Jugador {
     private boolean rerollDisponible = true;
     public JugadorVIP(String nombre, String apodo, int dineroInicial) {
-        super(nombre,apodo, dineroInicial);
+        super(nombre, apodo, dineroInicial);
     }
     @Override
     public int calcularApuesta() { return (int) (getDinero() * 0.30); }
