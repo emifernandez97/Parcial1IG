@@ -102,50 +102,85 @@ public class CasinoDados {
     }
 
     public static void mostrarReporteFinal() {
-        System.out.println("\n=======================================");
-        System.out.println(" REPORTE FINAL DEL CASINO");
+    System.out.println("\n=======================================");
+    System.out.println(" REPORTE FINAL DEL CASINO");
+    System.out.println("=======================================");
+    
+ 
+    if (jugadoresGlobales.isEmpty()) {
+        System.out.println("No hay datos de jugadores para mostrar.");
         System.out.println("=======================================");
-        System.out.println("Jugadores participantes: " + jugadoresGlobales.size());
-        System.out.println("Total de partidas jugadas: " + (numeroPartida - 1));
-
-        System.out.println("--- RANKING FINAL ---");
-        jugadoresGlobales.sort(Comparator.comparingInt(Jugador::getDinero).reversed());
-        
-        int rank = 1;
-        for (Jugador j : jugadoresGlobales) {
-            String apodoStr = j.getApodo().isEmpty() || j.getApodo().equalsIgnoreCase(j.getNombre()) ? "" : " (" + j.getApodo() + ")";
-            System.out.println(rank + ". " + j.getNombre() + apodoStr + " - $" + j.getDinero() + " - " + j.getPartidasGanadas() + " rondas ganadas");
-            rank++;
-        }
-
-        System.out.println("--- ESTADÍSTICAS GENERALES ---");
-        System.out.println("Mayor apuesta realizada: $" + mayorApuesta + " (" + jugadorMayorApuesta + ")");
-        System.out.println("Mejor puntaje de dados: " + mejorPuntajeDados + " (" + jugadorMejorPuntaje + ")");
-        
-        System.out.print("Jugadores afectados por trampas: ");
-        List<String> trampasStr = new ArrayList<>();
-        // Simulamos trampas para jugadores que no sean La Casa
-        for(Jugador j : jugadoresGlobales) {
-            if (!(j instanceof JugadorCasino)) {
-                int trampasSimuladas = new Random().nextInt(4);
-                if(trampasSimuladas > 0) {
-                    trampasStr.add(j.getNombre() + "(" + trampasSimuladas + ")");
-                }
-            }
-        }
-        System.out.println(trampasStr.isEmpty() ? "Ninguno" : String.join(", ", trampasStr));
-        
-        System.out.println("Partida más larga: " + partidaMasLargaRondas + " rondas");
-
-        System.out.println("--- HISTORIAL RECIENTE ---");
-        int inicio = Math.max(0, historialPartidas.size() - 3);
-        if (historialPartidas.isEmpty()){
-            System.out.println("No hay partidas en el historial.");
-        } else {
-            for (int i = inicio; i < historialPartidas.size(); i++) {
-                System.out.println(historialPartidas.get(i));
-            }
-        }
-        System.out.println("=======================================");
+        return;
     }
+
+    System.out.println("Jugadores participantes: " + jugadoresGlobales.size());
+    System.out.println("Total de partidas jugadas: " + (numeroPartida - 1));
+
+    System.out.println("--- RANKING FINAL ---");
+    
+    // 1. Buscamos a "La Casa" para mostrarla primero
+    Jugador laCasa = null;
+    for (Jugador j : jugadoresGlobales) {
+        if (j instanceof JugadorCasino) {
+            laCasa = j;
+            break;
+        }
+    }
+
+    // 2. Creamos una nueva lista solo con los jugadores "humanos"
+    List<Jugador> jugadoresHumanos = new ArrayList<>();
+    for (Jugador j : jugadoresGlobales) {
+        if (!(j instanceof JugadorCasino)) {
+            jugadoresHumanos.add(j);
+        }
+    }
+
+    // 3. Ordenamos la lista de jugadores humanos por dinero (de mayor a menor)
+    jugadoresHumanos.sort(Comparator.comparingInt(Jugador::getDinero).reversed());
+
+    // 4. Imprimimos el ranking
+    int rank = 1;
+    if (laCasa != null) {
+        System.out.println(rank + ". " + laCasa.getNombre() + " (" + laCasa.getApodo() + ") - $" + laCasa.getDinero() + " - " + laCasa.getPartidasGanadas() + " rondas ganadas");
+        rank++;
+    }
+
+    for (Jugador j : jugadoresHumanos) {
+        // Mostramos el apodo solo si es distinto al nombre
+        String apodoStr = j.getApodo().equalsIgnoreCase(j.getNombre()) ? "" : " (" + j.getApodo() + ")";
+        System.out.println(rank + ". " + j.getNombre() + apodoStr + " - $" + j.getDinero() + " - " + j.getPartidasGanadas() + " rondas ganadas");
+        rank++;
+    }
+
+    System.out.println("--- ESTADÍSTICAS GENERALES ---");
+    System.out.println("Mayor apuesta realizada: $" + mayorApuesta + " (" + jugadorMayorApuesta + ")");
+    System.out.println("Mejor puntaje de dados: " + mejorPuntajeDados + " (" + jugadorMejorPuntaje + ")");
+    
+    // Simulamos las trampas para el reporte
+    System.out.print("Jugadores afectados por trampas: ");
+    List<String> trampasStr = new ArrayList<>();
+    for(Jugador j : jugadoresHumanos) {
+        int trampasSimuladas = new Random().nextInt(4); // Simula de 0 a 3 trampas
+        if(trampasSimuladas > 0) {
+            trampasStr.add(j.getNombre() + "(" + trampasSimuladas + ")");
+        }
+    }
+    System.out.println(trampasStr.isEmpty() ? "Ninguno" : String.join(", ", trampasStr));
+    
+    System.out.println("Partida más larga: " + partidaMasLargaRondas + " rondas");
+
+    System.out.println("--- HISTORIAL RECIENTE ---");
+    // Mostramos solo las últimas 3 partidas del historial
+    int inicio = Math.max(0, historialPartidas.size() - 3);
+    if (historialPartidas.isEmpty()){
+        System.out.println("No hay partidas en el historial.");
+    } else {
+        for (int i = inicio; i < historialPartidas.size(); i++) {
+            System.out.println(historialPartidas.get(i));
+        }
+    }
+    System.out.println("=======================================");
+}
+    
+    
 }
