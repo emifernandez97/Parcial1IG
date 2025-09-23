@@ -1,4 +1,3 @@
-import java.util.Random;
 
 public class JugadorCasino extends Jugador {
     private static final double PROBABILIDAD_DADOS_CARGADOS = 0.40; // 40%
@@ -19,19 +18,23 @@ public class JugadorCasino extends Jugador {
     }
 
     public int lanzarDados(Dado dadoNormal) {
-        if (Math.random() < PROBABILIDAD_DADOS_CARGADOS) {
-            System.out.println("-> ¡La Casa usa sus dados cargados!");
-            return 6;
-        } else {
-            return dadoNormal.tirar();
-        }
+    if (Math.random() < PROBABILIDAD_DADOS_CARGADOS) {
+        System.out.println("-> ¡La Casa usa sus dados cargados!");
+        // --- NUEVO ---
+        CasinoDados.registrarTrampa("Usó Dados Cargados para sacar un 6.");
+        return 6;
+    } else {
+        return dadoNormal.tirar();
     }
+}
 
     public boolean intentarConfundir(Jugador objetivo) {
-        if (Math.random() < PROBABILIDAD_CONFUNDIR) {
-            System.out.println("-> ¡La Casa intenta confundir a " + objetivo.getNombre() + "!");
-            return true;
-        }
-        return false;
+    if (Math.random() < PROBABILIDAD_CONFUNDIR) {
+        System.out.println("-> ¡La Casa intenta confundir a " + objetivo.getNombre() + "!");
+        // --- NUEVO ---
+        CasinoDados.registrarTrampa("Confundió a " + objetivo.getNombre() + " para reducir sus dados.");
+        return true;
     }
+    return false;
+}
 }
