@@ -7,3 +7,6 @@ https://chatgpt.com/share/68d228ed-2f88-8004-a301-8297bc09c677
 
 **Link de grabacion act 2**
 https://vimeo.com/1121298446/fbcade5195?share=copy
+
+**Link de grabacion act 3**
+https://vimeo.com/1121305153?share=copy
